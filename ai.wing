@@ -1,0 +1,251 @@
+# ai.wing — CPK Fire and Security Systems
+
+New premium one-pager, designed independently.
+Content harvest run: **2026-08-20** against `https://www.cpkfire.com/`.
+
+The live site is a **content source only**. Its layout, section order, navigation,
+typography, spacing and visual treatment are not carried over. The single
+visual carryover is the logo's accent red — see Section 2.
+
+---
+
+## 0. Harvest method (Section 1 hard gate — PASSED)
+
+The live site is an **Angular SPA** (`<app-root>`, AOT bundles). A plain `curl`
+returns a 6.2 KB shell with no body content, exactly as the brief predicted.
+
+**Tool used:** Playwright + Chromium (`chromium-1223`), scripts `extract.js` /
+`extract2.js`.
+
+- `npx playwright install chromium` failed mid-download on the newest revision;
+  resolved by pointing `executablePath` at the already-present `chromium-1223`.
+  Rendering then worked fully.
+- Home page rendered **4,156 characters** of real text, **18 `<img>`** elements
+  and 2 CSS background images → gate passed. No invented content required.
+- Cross-checked against the Angular `main.*.js` string table and
+  `assets/css/style.css`; both agree with the rendered DOM.
+
+### Site shape found
+The live site is already a single page — `Home / About / Products / Portfolio /
+Contact` are in-page anchors. Every other route was probed and returns a
+13-character `404 Not Found`:
+
+`/about`, `/services`, `/products`, `/contact`, `/gallery`, `/projects`, `/clients`
+
+There is no additional published content anywhere. What follows is the complete
+corpus.
+
+---
+
+## 1. What was deliberately NOT carried over
+
+| Old site | New build |
+|---|---|
+| Nunito + Open Sans | **Sora + Inter** — geometric grotesque display, neutral body |
+| Warm-plum neutrals (`#493C3E`, `#444444`, `#777777`, `#F6F4F4`) | **Cool slate scale** on white / `#F9FAFB` |
+| Rose accent `#E43C5C` (template default) | **Dropped.** Accent now derives from the logo only |
+| Nav: Home / About / Products / Portfolio / Contact | **Company / Systems / Credentials / Equipment / Contact** |
+| Hero: "Distributors of fire and security systems" | **"Every system that keeps a building safe."** |
+| Section order: Hero → About → Products → Partners → CTA → Portfolio → Contact | **Hero → Company → Systems → Credentials → Equipment → Contact** |
+| Bootstrap card rows, uniform 3-up grids | Hairline-seam bento (7/5, 5/7, 6/6), numbered tiles, CSS-columns masonry |
+| Full-lockup logo scaled down until illegible | Circular mark + wordmark set in type |
+
+An earlier iteration of this build did inherit the old typography, neutrals and
+section order. That was corrected — this file describes the current state.
+
+---
+
+## 2. Colour — one carryover, everything else new
+
+### The carryover
+| Token | Value | Source |
+|---|---|---|
+| `brand-600` | `#E42128` | **Sampled from the real logo asset.** Canvas pixel histogram over `assets/img/logo/logo.png`; dominant ink cluster `rgb(240,40,48)`–`rgb(216,32,40)`, centre ≈ `#E42128` |
+
+`brand-50` … `brand-900` are tints and shades **derived here** from that single
+sampled value. The old site's `#E43C5C` / `#D01D3F` / `#FDEFF2` accents are not
+used.
+
+### The new neutral system
+Cool slate on a white base, per brief Section 4 — `#FFFFFF` base, `#F9FAFB`
+alternating sections, `#0F172A` text. `slate-50` through `slate-900` are the
+standard cool-slate ramp. **No old-site neutral appears in this build.**
+
+**Fallback not used.** The brief's inferred `~#E63946` was unnecessary — a real
+logo value was recovered.
+
+### Typography — new, not extracted
+**Sora** (display, 500–800) + **Inter** (body, 400–600). Chosen for this build:
+Sora is a precise geometric grotesque that suits life-safety equipment. The old
+site's Nunito/Open Sans pairing is deliberately not used.
+
+---
+
+## 3. Copy — source per item
+
+Legend: **EXTRACTED** = fact published on the live site · **VERIFIED** = GST /
+Bosch dealer directory · **REWRITTEN** = new wording for this layout, carrying
+only facts that trace to one of the first two.
+
+| Item | Source |
+|---|---|
+| Legal name `CPK Fire and Security Systems Private Limited` | **VERIFIED (GST)** |
+| Registered address `C/5, 288, 4th Main Road, BDA Layout, Domlur 2nd Stage, 3rd Phase, Bengaluru 560071` | **EXTRACTED + VERIFIED (GST)** — both agree |
+| Authorized Bosch Security Systems distributor (CCTV) | **VERIFIED (Bosch India dealer directory)**; live site independently lists Bosch as a partner |
+| Emails `prasanna@cpkfire.com`, `chandru@cpkfire.com` | **EXTRACTED** |
+| Landline `080-43029821` | **EXTRACTED** |
+| Mobiles `+91 99805 49167`, `+91 99722 35411` | **EXTRACTED** |
+| Google Maps link `?q=12.9637833,77.6350296` | **EXTRACTED** |
+| Established 2018, Bengaluru | **EXTRACTED** (live Portfolio paragraph) |
+| IndiaMART storefront link | **EXTRACTED** (live product cards link there) |
+| Six system titles + taglines | **EXTRACTED** — verbatim; these are the company's own product claims |
+| "Distributors for the Products" six-item list | **EXTRACTED** — verbatim |
+| Partner roster (Bosch, Siemens, HID, Assa Abloy, Xtralis, Micro Power, EBSS, Security Shells) | **EXTRACTED** |
+| Partners body copy | **EXTRACTED** |
+| H1 "Every system that keeps a building safe." | **REWRITTEN** — restates the real six-system range; adds no capability not already listed |
+| Hero eyebrow "Bengaluru · Established 2018" | **REWRITTEN** from the real founding year + city |
+| Hero sub-line | **REWRITTEN** — the six real systems compressed to one line |
+| About H2 "A security engineering company, not a box shifter." | **REWRITTEN** from the live phrases "professionally managed security engineering company" and "box selling" |
+| About lede | **REWRITTEN** from the live about paragraph |
+| Three about points (Qualified personnel / Quality and cost / Distribution-led) | **REWRITTEN** — condensed from the two live "Mission" paragraphs |
+| Systems H2 "Six system lines, one supply partner." | **REWRITTEN** — six is the real count |
+| Equipment H2 "The equipment we move" + body | **REWRITTEN** from the live Portfolio paragraph |
+| Contact H2 "Tell us about the site." + body | **REWRITTEN** from the live Contact paragraph |
+| Credential counters (08 partners / 06 system lines / 01 Bengaluru base / 2018) | **DERIVED** — all four are counts of extracted facts, not new claims |
+
+### Live-site data errors corrected
+- `partners/mp.jpg` carries `alt="EBSS"` on the live site but is a **Micro Power**
+  logo, and the live About copy names Micro Power as a partner. Relabelled.
+- The live footer prints `+91 9980549167` twice where the contact section lists
+  two distinct numbers. Used the contact section's correct pair.
+
+---
+
+## 4. Images — 100% first-party
+
+Every image is downloaded and served from `/public/images/`.
+**No hotlinks to cpkfire.com. No stock. No placeholders. No lorem ipsum.**
+
+### Brand
+| File | Source |
+|---|---|
+| `brand/logo.png` | `assets/img/logo/logo.png` — 3000×2000 transparent PNG, original untouched |
+| `brand/favicon.png` | `assets/img/logo/favicon.png` — tab icon |
+| `brand/logo-mark.png` | **DERIVED from `logo.png`** — circular CPK mark auto-cropped by alpha-bounding-box + row-gap detection, squared, downscaled to 512×512 (1.58 MB → 154 KB). A crop of the real asset; no pixels redrawn. Needed because the full lockup's `FIRE AND SECURITY SYSTEMS PVT LTD` tagline renders at ~6 px in a navbar |
+
+### Photography
+| File | Source | Used in |
+|---|---|---|
+| `hero-bg.jpg` | live hero CSS background | Hero, full-bleed with GSAP parallax |
+| `cta-bg.jpg` | live CTA CSS background | **DOWNLOADED, DELIBERATELY UNUSED** — it is a stock photo of a design workshop (markers, magazine cut-outs), unreplaced template filler with no relation to fire or security |
+
+### Partner logos (8)
+`bosch.png`, `Siemens.png`, `hid.png`, `aa.png`, `xtralis.svg`, `mp.jpg`,
+`ebss.png`, `ss.jpeg` — Credentials marquee, plus Bosch featured in the badge card.
+
+### Product photography (9)
+The live site publishes these **unlabelled** (`alt=""`) with no project names,
+clients or dates. Each was **visually identified** by opening the file. Captions
+in the build describe the hardware pictured — **no project is claimed anywhere**.
+
+| File | Identified as | Basis |
+|---|---|---|
+| `fa_3.jpg` | Fire alarm panel & field devices | Hochiki panel + detectors + sounder + call point |
+| `ac_2.jpg` | HID iCLASS SE readers & credentials | HID branding + "iCLASS Seos" card |
+| `pava_1.jpg` | Bosch PAVA amplifiers & call station | Bosch branding visible |
+| `cc_3.jpg` | IR dome surveillance camera | visual |
+| `ac_7.jpg` | Assa Abloy proximity reader | "ASSA ABLOY" printed on unit |
+| `1.jpeg` | Optical smoke & heat detector | visual |
+| `dd.jpg` | RFID hotel door lock | visual |
+| `4.jpeg` | HID AERO access controller | "HID" + "AERO X200" printed on board |
+| `aa.jpg` | VESDA aspirating smoke detection | "VESDA" printed on panel |
+
+All nine corroborated by the live site's own filename prefixes (`fa_`, `ac_`,
+`cc_`, `pava_`) and by manufacturers the live About copy already names.
+
+### Unsplash — attempted, blocked
+Brief Section 7 permits Unsplash for sections the old site has no equivalent
+content for. **Unsplash is behind bot detection**: both
+`unsplash.com/napi/search/photos` and `unsplash.com/s/photos/*` return an
+interstitial (`HTTP 401`, "Making sure you're not a bot!"). Bypassing bot
+detection is out of scope, so no third-party stock was used and no Lorem Picsum
+placeholder was introduced. Every image in the build is a real CPK asset.
+
+---
+
+## 5. What the live site does not have
+
+Checked across the home page and all seven probed routes. Nothing invented to
+fill these; sections requiring invention were not built.
+
+| Missing | Handling |
+|---|---|
+| **Named projects / case studies** | The live "Portfolio" holds product photography only — no names, clients, sites or dates. Rebuilt honestly as **Equipment** with hardware captions. Brief Section 5 flag raised: **there are no project photos on the live site** |
+| **Team bios / photos** | None published — no team section built |
+| **Testimonials** | None published — none built |
+| **Certifications / awards** | None published on-site. Credentials section carries only the **VERIFIED** Bosch listing, the **EXTRACTED** 2018 founding year, and **VERIFIED** GST/Pvt-Ltd status |
+| **Statistics** (installs, clients, headcount) | None published — none invented, none shown |
+| **Company history** | Only "Established in the year 2018 at Bengaluru, Karnataka". Used exactly that |
+| **Social links** | Live footer icons link to `#` (dead) — omitted rather than fabricated |
+| **Privacy policy** | Linked to `#`, no page exists — omitted |
+| **Form backend** | The live form posts nowhere. Rebuilt to compose a `mailto:` to both real addresses — no fake success state |
+| **Video** | None on the live site |
+
+---
+
+## 6. Open blockers
+
+**None blocking the build.** No bracketed placeholders were required — every
+contact detail, claim and image resolved to a real extracted or verified source.
+
+For a human decision before go-live:
+
+1. **`logo.png` is a weak source asset** — 3000×2000 with compression artefacts
+   baked into the transparent PNG and a soft bevelled treatment. A vector redraw
+   would materially lift the design. Not actioned: redrawing a logo is a brand
+   decision.
+2. **Low-resolution partner logos** — `ss.jpeg` is 200×112 and `ebss.png` is
+   112×60; both soften in the marquee. Higher-res versions would help.
+3. **Social profiles** — supply real URLs and the footer can carry them.
+4. **Privacy policy** — linked but non-existent on the live site.
+5. **Form backend** — currently `mailto:`. A real endpoint (Formspree, Resend, or
+   a route handler) is a one-file change.
+6. **Micro Power alt-text error** on the live site is worth fixing at source.
+7. **No project photography exists.** If CPK has site/installation photos, an
+   actual projects section becomes possible — currently it cannot be built
+   honestly.
+
+---
+
+## 7. Build
+
+- Next.js 15.1.6 App Router · TypeScript (strict) · Tailwind CSS 3.4
+- **Lenis** — global smooth scroll, driven off the GSAP ticker so ScrollTrigger
+  and Lenis share one clock; anchor links routed through `lenis.scrollTo`
+- **GSAP + ScrollTrigger** — scrubbed parallax on the hero photograph and the
+  About product frame
+- **Framer Motion** — word-by-word hero headline reveal, `whileInView` fade-ups,
+  staggered rails, hover zoom inside `overflow-hidden`, mobile menu transitions
+- **Marquee** — pure CSS keyframe, no package
+- `lucide-react` for system icons; all brand marks are real assets
+- `prefers-reduced-motion` respected throughout (Lenis skipped, parallax skipped)
+- No dark sections
+
+`npm run build` → clean, zero errors.
+
+### Verified in a real browser (Playwright)
+
+| Check | desktop 1440 | tablet 834 | mobile 390 |
+|---|---|---|---|
+| Images rendered / broken | 36 / **0** | 36 / **0** | 36 / **0** |
+| Horizontal overflow | none | none | none |
+| Empty containers | none | none | none |
+| Console errors | none | none | none |
+| HTTP ≥400 responses | none | none | none |
+| `<h1>` count | 1 | 1 | 1 |
+
+Hover-reveals, marquee, parallax, scroll reveals and the mobile menu were all
+exercised against the running server.
+
+> Note for future runs: do not run `npm run build` while `next dev` is live —
+> they share `.next` and the dev server will serve a corrupted bundle.
