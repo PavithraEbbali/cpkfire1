@@ -48,10 +48,10 @@ function MaskLine({ text, gradient = false }: { text: string; gradient?: boolean
 export default function Hero() {
   return (
     <section id="top" className="relative isolate overflow-hidden bg-white">
-      {/* Full-bleed intro film under two light washes. No `poster` — the old
-          hero photograph it pointed at is gone, and a missing poster 404s and
-          flashes transparent; the slate base below covers the frame or two
-          before the film paints instead. GSAP drives the drift. */}
+      {/* Full-bleed intro film. No `poster` — the old hero photograph it pointed
+          at is gone, and a missing poster 404s and flashes transparent; the
+          slate base below covers the frame or two before the film paints
+          instead. GSAP drives the drift. */}
       <div className="absolute inset-0 -z-10 bg-slate-100">
         {/* `scale-110` on top of Parallax's own `zoom` (1.12) compounded to
             ~1.23, which cropped the 848x480 source hard on a short 14" hero.
@@ -70,34 +70,56 @@ export default function Hero() {
             tabIndex={-1}
           />
         </Parallax>
-        {/* A side gradient plus a seam fade, nothing more. The horizontal wash
-            carries the copy's contrast on the left third and clears to fully
-            transparent by 55%, so the film plays unobstructed across most of
-            the frame. The vertical one only lifts the nav strip and lands on
-            solid white at the section seam. */}
-/* `from-white/88` silently killed this gradient: 88 is not on Tailwind's
-            default opacity scale, so `--tw-gradient-from` never generated and the
-            whole stop list resolved to `none`. Any /5 step is safe. */
-        {/* Cinematic side vignette. This is the only thing carrying the copy's
-            contrast now, so it holds near-opaque over the text column and
-            resolves to fully transparent by 62% — the film stays untouched
-            across the right third. Every opacity here is a /5 step: Tailwind's
-            default scale has no /88-style values, and an off-scale stop makes
-            the whole gradient resolve to `none`. */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 via-42% to-transparent to-72%" />
-        {/* Below `sm` the copy sits over the middle of the frame, where a
-            horizontal wash cannot reach it. */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/85 via-white/60 to-white/85 sm:hidden" />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/35 via-transparent via-30% to-white to-97%" />
-        {/* Soft vignette for depth — corners only, centre untouched. */}
+
+        {/*
+          Nothing below covers the whole frame. Each scrim is narrow and
+          purpose-built — one behind the copy, one under the nav strip, one at
+          the section seam — so everywhere else the film plays completely
+          unobstructed.
+
+          Every opacity is a /5 step on purpose: Tailwind's default scale has
+          no /88-style value, and a single off-scale stop makes the entire
+          gradient resolve to `none`.
+        */}
+
+        {/* 1. The copy scrim, and the only thing carrying the headline's
+            contrast. Width-capped so it can never reach the right of the
+            frame: near-opaque under the text column, fully transparent by its
+            own trailing edge. The `via-75%` matters — the longest headline
+            line runs to ~78% of the scrim, so an evenly spaced midpoint would
+            leave its last word sitting on bare film. Holding /50 out to 75%
+            puts the whole fade in the empty margin past the text. */}
         <div
           aria-hidden
-          className="absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_45%,transparent_45%,rgba(255,255,255,0.35)_100%)]"
+          className="absolute inset-y-0 left-0 w-full max-w-[34rem] bg-gradient-to-r from-white/90 via-white/50 via-75% to-transparent sm:max-w-[44rem] lg:max-w-[54rem]"
+        />
+
+        {/* 2. Nav strip only. The bar runs transparent until scroll and its
+            links are slate, so the top ~7rem needs a lift the rest of the
+            frame does not. */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white/80 via-white/35 to-transparent"
+        />
+
+        {/* 3. Section seam. Lands on solid white exactly where the next
+            section starts, so the cut is invisible. */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent via-white/60 to-white sm:h-48"
+        />
+
+        {/* 4. Below `sm` the copy spans the full width, where a lateral scrim
+            alone cannot carry it — this vertical companion covers the text
+            band and clears well above the fold's lower third. */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 top-0 h-[76%] bg-gradient-to-b from-white/85 via-white/70 via-55% to-transparent sm:hidden"
         />
       </div>
 
       <div className="shell relative z-10">
-        <div className="flex min-h-[86svh] flex-col justify-center pb-24 pt-32 sm:pb-28 sm:pt-40 lg:min-h-[88svh]">
+        <div className="flex min-h-[70svh] flex-col justify-center pb-10 pt-28 sm:min-h-[72svh] sm:pt-32 lg:min-h-[70svh] lg:pt-32">
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
@@ -112,7 +134,7 @@ export default function Hero() {
             initial="hidden"
             animate="show"
             variants={headlineStagger}
-            className="display mt-7 max-w-[17ch] text-balance text-[2.35rem] leading-[1.06] tracking-tight text-[#0A1F44] sm:text-[3.2rem] lg:text-[3.8rem] lg:leading-[1.03]"
+            className="display mt-6 max-w-[15ch] text-balance text-[2.3rem] leading-[1.07] tracking-tight text-[#0A1F44] sm:mt-7 sm:text-[3.05rem] sm:leading-[1.05] lg:text-[3.55rem] lg:leading-[1.04] xl:text-[3.9rem]"
           >
             <MaskLine text={hero.headline} />
             <MaskLine text={hero.headlineAccent} gradient />
@@ -122,7 +144,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4, ease: EASE }}
-            className="mt-7 max-w-lg text-pretty text-[1.02rem] font-medium leading-relaxed text-slate-600"
+            className="mt-5 max-w-md text-pretty text-[0.98rem] font-medium leading-relaxed text-slate-700 sm:mt-6 sm:max-w-lg sm:text-[1.02rem]"
           >
             {hero.sub}
           </motion.p>
@@ -131,11 +153,11 @@ export default function Hero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.52, ease: EASE }}
-            className="mt-9 flex flex-wrap items-center gap-3"
+            className="mt-7 flex flex-col items-stretch gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center"
           >
             <a
               href={hero.primaryCta.href}
-              className="group inline-flex items-center gap-2 rounded-lg bg-brand-600 px-7 py-4 text-[0.92rem] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-700 hover:shadow-lift"
+              className="group inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 px-6 py-3.5 text-[0.9rem] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-700 hover:shadow-lift sm:px-7 sm:py-4 sm:text-[0.92rem]"
             >
               {hero.primaryCta.label}
               <ArrowRight
@@ -145,7 +167,7 @@ export default function Hero() {
             </a>
             <a
               href={contact.mobiles[0].href}
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white/80 px-7 py-4 text-[0.92rem] font-semibold text-slate-900 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-900"
+              className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white/80 px-6 py-3.5 text-[0.9rem] font-semibold text-slate-900 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-900 sm:px-7 sm:py-4 sm:text-[0.92rem]"
             >
               <Phone className="h-4 w-4" strokeWidth={2.3} />
               {contact.mobiles[0].label}
@@ -160,7 +182,7 @@ export default function Hero() {
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        className="shell relative z-10 pb-16 sm:pb-20"
+        className="shell relative z-10 pb-12 sm:pb-14"
         transition={{ duration: 0.9, delay: 0.7, ease: EASE }}
       >
         <div className="relative overflow-hidden rounded-2xl border border-orange-500/20 bg-white/80 px-5 py-5 shadow-xl shadow-slate-900/10 backdrop-blur-xl sm:px-7">
