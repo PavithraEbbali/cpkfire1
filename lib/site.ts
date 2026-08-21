@@ -59,11 +59,13 @@ export const hero = {
   /** [DERIVED] from the live founding year + city, written for this layout */
   eyebrow: 'Bengaluru · Established 2018',
   /**
-   * [DERIVED] Written new for this build. Restates the real six-system range
-   * the live site publishes — it is not the old site's hero wording, and adds
-   * no capability the company does not already list.
+   * [CLIENT-SUPPLIED] Provided verbatim by the client for this build. It is a
+   * positioning statement, not a capability claim — the six real system lines
+   * it stands over are listed in `sub` and in `about.distributes`.
    */
-  headline: 'Every system that keeps a building safe.',
+  headline: 'Absolute Safety Engineering.',
+  /** [CLIENT-SUPPLIED] Second headline line, carried in the fire gradient. */
+  headlineAccent: 'Delivered Without Compromise.',
   /** [DERIVED] the six real systems, compressed to one line */
   sub: 'Fire detection and suppression, access control, CCTV, aspirating detection, voice alarm and hotel locking — distributed and specified from Bengaluru.',
   primaryCta: { label: 'See the systems', href: '#systems' },

@@ -59,9 +59,16 @@ const config: Config = {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-50%)' },
         },
+        /* Scrubs a 200%-wide gradient across the glyphs. Position only, so it
+           stays off the main thread. */
+        shimmer: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
       },
       animation: {
         marquee: 'marquee 44s linear infinite',
+        shimmer: 'shimmer 7s ease-in-out infinite',
       },
     },
   },

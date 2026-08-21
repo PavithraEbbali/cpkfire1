@@ -6,11 +6,17 @@ import { ArrowUpRight, Mail, MapPin, Phone, Send } from 'lucide-react';
 import { Reveal } from '@/components/ui/Reveal';
 import { contact, contactCopy, company } from '@/lib/site';
 
-const FIELD =
-  'w-full rounded-lg border border-slate-300 bg-white px-4 py-3.5 text-[0.95rem] text-slate-900 placeholder:text-slate-400 transition-colors duration-200 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/15';
+const FIELD = [
+  'w-full rounded-xl border border-slate-300/80 bg-white/70 px-4 py-3.5',
+  'text-[0.95rem] text-slate-900 placeholder:text-slate-400 backdrop-blur-sm',
+  'transition-all duration-300 hover:border-slate-400',
+  'focus:border-[#FF5A00] focus:outline-none focus:ring-2 focus:ring-[#FF5A00]/20',
+].join(' ');
 
 const LABEL =
   'mb-2 block text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-slate-500';
+
+const EASE = [0.16, 1, 0.3, 1] as const;
 
 export default function Contact() {
   const [status, setStatus] = useState<'idle' | 'sent'>('idle');
@@ -84,10 +90,27 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" className="relative border-t border-slate-200 bg-white">
-      <div className="shell py-24 sm:py-32 lg:py-40">
+    <section
+      id="contact"
+      className="relative overflow-hidden border-t border-slate-200 bg-white"
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-40 top-1/4 h-[34rem] w-[34rem] rounded-full bg-orange-200/25 blur-[150px]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-32 bottom-0 h-[28rem] w-[28rem] rounded-full bg-amber-200/25 blur-[150px]"
+      />
+
+      <div className="shell relative py-24 sm:py-32 lg:py-40">
         <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '0px 0px -12% 0px' }}
+            transition={{ duration: 0.8, ease: EASE }}
+          >
             <span className="eyebrow">
               <span className="h-px w-7 bg-brand-600" aria-hidden />
               Contact
@@ -101,9 +124,14 @@ export default function Contact() {
 
             <Reveal className="mt-12 space-y-px">
               {details.map(({ icon: Icon, title, body, action }) => (
-                <div key={title} className="border-t border-slate-200 py-7">
+                <div
+                  key={title}
+                  className="group -mx-4 rounded-xl border-t border-slate-200 px-4 py-7 transition-colors duration-500 hover:border-orange-400/60 hover:bg-orange-50/40"
+                >
                   <div className="flex items-center gap-2.5">
-                    <Icon className="h-4 w-4 text-brand-600" strokeWidth={2.3} />
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-orange-500/20 bg-orange-50/60 transition-colors duration-500 group-hover:border-[#FF5A00]/50 group-hover:bg-orange-100/70">
+                      <Icon className="h-4 w-4 text-brand-600" strokeWidth={2.3} />
+                    </span>
                     <h3 className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-slate-900">
                       {title}
                     </h3>
@@ -126,13 +154,32 @@ export default function Contact() {
                 </div>
               ))}
             </Reveal>
-          </div>
+          </motion.div>
 
-          <Reveal delay={0.08}>
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '0px 0px -12% 0px' }}
+            transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
+          >
             <form
               onSubmit={onSubmit}
-              className="rounded-2xl border border-slate-200 bg-slate-50 p-8 shadow-card sm:p-10"
+              className={[
+                'relative overflow-hidden rounded-2xl p-8 sm:p-10',
+                'border border-orange-500/20 shadow-2xl shadow-orange-500/10',
+                'bg-gradient-to-br from-white via-slate-50/50 to-orange-50/20 backdrop-blur-xl',
+              ].join(' ')}
             >
+              {/* Ember accents behind the fields, inert to input. */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[#FF5A00]/10 blur-3xl"
+              />
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-amber-400/70 to-transparent"
+              />
+              <div className="relative">
               <div className="grid gap-5 sm:grid-cols-2">
                 <label className="block">
                   <span className={LABEL}>Name</span>
@@ -178,9 +225,18 @@ export default function Contact() {
                 whileHover={{ y: -2 }}
                 whileTap={{ y: 0 }}
                 transition={{ duration: 0.2 }}
-                className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-600 px-7 py-4 text-[0.92rem] font-semibold text-white transition-colors duration-300 hover:bg-brand-700 hover:shadow-lift sm:w-auto"
+                className={[
+                  'group mt-7 inline-flex w-full items-center justify-center gap-2.5 sm:w-auto',
+                  'rounded-xl px-7 py-4 text-[0.92rem] font-semibold text-white',
+                  'bg-gradient-to-r from-[#FF5A00] via-brand-600 to-[#FF5A00] bg-[length:200%_100%] bg-left',
+                  'shadow-lg shadow-[#FF5A00]/30 transition-all duration-500',
+                  'hover:bg-right hover:shadow-xl hover:shadow-[#FF5A00]/45',
+                ].join(' ')}
               >
-                <Send className="h-4 w-4" strokeWidth={2.3} />
+                <Send
+                  className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  strokeWidth={2.3}
+                />
                 Send enquiry
               </motion.button>
 
@@ -191,9 +247,10 @@ export default function Contact() {
                 {status === 'sent'
                   ? 'Opening your mail app with the enquiry drafted.'
                   : `Goes to ${contact.emails.join(' and ')}.`}
-              </p>
+                </p>
+              </div>
             </form>
-          </Reveal>
+          </motion.div>
         </div>
       </div>
     </section>
